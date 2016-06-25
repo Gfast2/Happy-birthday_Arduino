@@ -2,16 +2,24 @@
 //This following code plays happy birthday melody on Arduino
 //Put Piezo Buzzer on GDN and 9 (Positive and negative are reversible)
 //this project requires a Piezo Buzzer and
-
 // an Arduino board and
-
 //jumper wires to connect Buzzer's (+) to ~9 and (-) to GND (any GND)
+// Button: Push down=close, not push=open.
 
-// Button: Push down = close, not push = open.
-//
+// Last Edite: 2016-6-25
+// Co-Writer : Su Gao
 
-int speakerPin = 9;
-int button = 6;
+
+#define led1       A0
+#define led2       A1
+#define led3       A4
+#define led4       A5
+#define speakerPin 9
+#define button     6
+
+int butState     = 0;
+int butState_old = 0;
+int stater       = 0;
 
 int length = 28; // the number of notes
 
@@ -69,10 +77,6 @@ void playNote(char note, int duration) {
 
 }
 
-#define led1 A0
-#define led2 11
-#define led3 A4
-#define led4 A5
 
 void playLED(){
   digitalWrite(led1, random(2));
@@ -80,10 +84,6 @@ void playLED(){
   digitalWrite(led3, random(2));
   digitalWrite(led4, random(2));
 }
-
-int butState     = 0;
-int butState_old = 0;
-int stater       = 0;
 
 void setup() {
 
@@ -97,8 +97,6 @@ void setup() {
   digitalWrite(led2,LOW);
   digitalWrite(led3,LOW);
   digitalWrite(led4,LOW);
-  //Serial.begin(115200);
-  //Serial.println("Tom happy birthday");
 
 }
 
@@ -107,7 +105,6 @@ void loop() {
   for (int i = 0; i < length; i++) {
 
     butState = digitalRead(button);
-    //erial.println(butState);
 
     if (butState == 0 && butState_old == 1) { // When the button is pushed
       if (stater == 0) {
@@ -127,11 +124,14 @@ void loop() {
         playNote(notes[i], beats[i] * tempo);
       }
     }
+
     // pause between notes
     delay(tempo - 100);
 
     butState_old = butState; // update the old State of the button.
 
   }
+
   delay(tempo + 50);
+
 }
